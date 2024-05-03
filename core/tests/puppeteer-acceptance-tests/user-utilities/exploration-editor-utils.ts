@@ -1155,32 +1155,36 @@ export class ExplorationEditor extends BaseUser {
 
   /**
    * Selects two revisions of an exploration for comparison.
-   * @param {number} versionNumber1 - The version number of the first revision to select.
-   * @param {number} versionNumber2 - The version number of the second revision to select.
+   * @param {number} versionNo1 - The version number of the first revision to select.
+   * @param {number} versionNo2 - The version number of the second revision to select.
    */
   async selectTwoRevisionsForComparison(
-    versionNumber1: number,
-    versionNumber2: number
+    versionNo1: number,
+    versionNo2: number
   ): Promise<void> {
-    if (versionNumber1 === versionNumber2) {
-      throw new Error('Both version numbers cannot be the same.');
+    if (versionNo1 === versionNo2) {
+      throw new Error('Both revision indexes cannot be the same.');
     }
 
     await this.page.waitForSelector(firstRevisionDropdown);
     await this.clickOn(firstRevisionDropdown);
     const panel1 = '#mat-select-0-panel';
     await this.page.waitForSelector(
-      `${panel1} mat-option[value="${versionNumber1}"]`
+      `${panel1} mat-option:nth-last-child(${versionNo1})`
     );
-    await this.clickOn(`${panel1} mat-option[value="${versionNumber1}"]`);
+    await this.clickOn(
+      `${panel1} mat-option:nth-last-child(${versionNo1})`
+    );
 
     await this.page.waitForSelector(secondRevisionDropdown);
     await this.clickOn(secondRevisionDropdown);
     const panel2 = '#mat-select-2-panel';
     await this.page.waitForSelector(
-      `${panel2} mat-option[value="${versionNumber2}"]`
+      `${panel2} mat-option:nth-last-child(${versionNo2})`
     );
-    await this.clickOn(`${panel2} mat-option[value="${versionNumber2}"]`);
+    await this.clickOn(
+      `${panel2} mat-option:nth-last-child(${versionNo2})`
+    );
   }
 
   /**
