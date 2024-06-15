@@ -1313,6 +1313,9 @@ export class LoggedOutUser extends BaseUser {
       ? readBlogPostMobileButtonInPartnershipsPage
       : readBlogPostDesktopButtonInPartnershipsPage;
 
+    await this.page.waitForSelector(readBlogPostButtonInPartnershipsPage, {
+      visible: true,
+    });
     await this.clickLinkButtonToNewTab(
       readBlogPostButtonInPartnershipsPage,
       'Read blog post button',
