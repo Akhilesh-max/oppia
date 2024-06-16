@@ -1313,9 +1313,13 @@ export class LoggedOutUser extends BaseUser {
       ? readBlogPostMobileButtonInPartnershipsPage
       : readBlogPostDesktopButtonInPartnershipsPage;
 
+    const matCardContentSelector = '[data-test="mat-card-content"]';
+    await this.page.waitForSelector(matCardContentSelector, {visible: true});
+    await this.page.click(matCardContentSelector);
     await this.page.waitForSelector(readBlogPostButtonInPartnershipsPage, {
       visible: true,
     });
+
     await this.clickLinkButtonToNewTab(
       readBlogPostButtonInPartnershipsPage,
       'Read blog post button',
