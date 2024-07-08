@@ -532,6 +532,31 @@ export class BaseUser {
   async waitForPageToFullyLoad(): Promise<void> {
     await this.page.waitForFunction('document.readyState === "complete"');
   }
+
+  async waitForNetworkIdle(): Promise<void> {
+    let activeRequests = 0;
+    const networkIdlePromise = new Promise<void>(resolve => {
+      const checkIdle = setInterval(() => {
+        if (activeRequests === 0) {
+          clearInterval(checkIdle);
+          resolve();
+        }
+      }, 500);
+    });
+
+    const onRequestStarted = () => activeRequests++;
+    const onRequestFinished = () => activeRequests--;
+
+    this.page.on('request', onRequestStarted);
+    this.page.on('requestfinished', onRequestFinished);
+    this.page.on('requestfailed', onRequestFinished);
+
+    await networkIdlePromise;
+
+    this.page.off('request', onRequestStarted);
+    this.page.off('requestfinished', onRequestFinished);
+    this.page.off('requestfailed', onRequestFinished);
+  }
 }
 
 export const BaseUserFactory = (): BaseUser => new BaseUser();
