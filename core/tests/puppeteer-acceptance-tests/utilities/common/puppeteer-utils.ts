@@ -531,6 +531,7 @@ export class BaseUser {
    */
   async waitForPageToFullyLoad(): Promise<void> {
     await this.page.waitForFunction('document.readyState === "complete"');
+    await this.page.waitForFunction('window.onload !== null');
   }
 }
 
