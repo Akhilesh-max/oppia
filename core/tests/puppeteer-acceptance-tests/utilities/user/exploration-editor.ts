@@ -873,7 +873,7 @@ export class ExplorationEditor extends BaseUser {
   }
 
   /**
-   * Function to add responses to the interactions. Currently, it only handles 'Number Input' interaction type.
+   * Function to add responses to the interactions. Currently, it only handles 'Number Input' interaction type
    * @param {string} interactionType - The type of the interaction.
    * @param {string} answer - The response to be added.
    * @param {string} feedback - The feedback for the response.
