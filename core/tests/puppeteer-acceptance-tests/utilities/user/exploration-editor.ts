@@ -849,7 +849,7 @@ export class ExplorationEditor extends BaseUser {
           element.$eval('tspan', node => node.textContent)
         )
       );
-      // The card name is suffixed with a space to match the format in the UI.
+      // The card name is suffixed with a space to match the format in the UI
       const cardIndex = cardNames.indexOf(cardName + ' ');
 
       if (cardIndex === -1) {
