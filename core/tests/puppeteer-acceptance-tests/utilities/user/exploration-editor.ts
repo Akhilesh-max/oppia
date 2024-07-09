@@ -862,7 +862,7 @@ export class ExplorationEditor extends BaseUser {
         await elements[cardIndex].click();
       }
 
-      await this.page.waitForNetworkIdle({idleTime: 700});
+      await this.waitForPageToFullyLoad();
     } catch (error) {
       const newError = new Error(
         `Error navigating to card ${cardName}: ${error.message}`

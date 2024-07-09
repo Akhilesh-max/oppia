@@ -531,32 +531,35 @@ export class BaseUser {
    */
   async waitForPageToFullyLoad(): Promise<void> {
     await this.page.waitForFunction('document.readyState === "complete"');
+    await this.waitTillHTMLRendered(this.page);
   }
 
-  async waitForNetworkIdle(): Promise<void> {
-    let activeRequests = 0;
-    const networkIdlePromise = new Promise<void>(resolve => {
-      const checkIdle = setInterval(() => {
-        if (activeRequests === 0) {
-          clearInterval(checkIdle);
-          resolve();
-        }
-      }, 500);
-    });
+  private waitTillHTMLRendered = async (page, timeout = 30000) => {
+    const checkDurationMsecs = 1000;
+    const maxChecks = timeout / checkDurationMsecs;
+    let lastHTMLSize = 0;
+    let checkCounts = 1;
+    let countStableSizeIterations = 0;
+    const minStableSizeIterations = 3;
 
-    const onRequestStarted = () => activeRequests++;
-    const onRequestFinished = () => activeRequests--;
+    while (checkCounts++ <= maxChecks) {
+      let html = await page.content();
+      let currentHTMLSize = html.length;
 
-    this.page.on('request', onRequestStarted);
-    this.page.on('requestfinished', onRequestFinished);
-    this.page.on('requestfailed', onRequestFinished);
+      if (lastHTMLSize != 0 && currentHTMLSize == lastHTMLSize) {
+        countStableSizeIterations++;
+      } else {
+        countStableSizeIterations = 0;
+      }
+      if (countStableSizeIterations >= minStableSizeIterations) {
+        showMessage('Page rendered fully.');
+        break;
+      }
 
-    await networkIdlePromise;
-
-    this.page.off('request', onRequestStarted);
-    this.page.off('requestfinished', onRequestFinished);
-    this.page.off('requestfailed', onRequestFinished);
-  }
+      lastHTMLSize = currentHTMLSize;
+      await page.waitForTimeout(checkDurationMsecs);
+    }
+  };
 }
 
 export const BaseUserFactory = (): BaseUser => new BaseUser();

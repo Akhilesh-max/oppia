@@ -911,7 +911,7 @@ export class LoggedOutUser extends BaseUser {
       target => target.opener() === pageTarget
     );
     const newTabPage = await newTarget.page();
-    await newTabPage?.waitForNetworkIdle();
+    await this.waitForPageToFullyLoad();
 
     expect(newTabPage?.url()).toContain(googleSignUpUrl);
     await newTabPage?.close();
@@ -981,8 +981,10 @@ export class LoggedOutUser extends BaseUser {
    */
   async clickForumLinkOnCreatorGuidelinesPage(): Promise<void> {
     await this.page.waitForXPath('//a[contains(text(),"forum")]');
-    await Promise.all([this.page.waitForNavigation(), this.clickOn('forum')]);
-    await this.page.waitForNetworkIdle();
+    await Promise.all([
+      this.page.waitForNavigation({waitUntil: ['networkidle0', 'load']}),
+      this.clickOn('forum'),
+    ]);
 
     expect(this.page.url()).toBe(googleGroupsOppiaUrl);
   }

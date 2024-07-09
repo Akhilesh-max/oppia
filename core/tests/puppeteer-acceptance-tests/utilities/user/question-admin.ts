@@ -130,7 +130,7 @@ export class QuestionAdmin extends BaseUser {
     );
     await this.clickOn(viewContributorSubmitButton);
 
-    await this.page.waitForNetworkIdle();
+    await this.waitForPageToFullyLoad();
 
     await this.page.waitForSelector(viewRoleUserResult);
     const displayedUsersText = await this.page.$eval(
