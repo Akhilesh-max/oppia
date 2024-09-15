@@ -1198,11 +1198,11 @@ export class LoggedInUser extends BaseUser {
           );
         }
       }
-    } catch {
+    } catch (error) {
       console.error('Error in publishExplorationWithMetadata:', error);
       // Ensure the screenshots directory exists
       const dirPath = path.resolve(
-        dirname,
+        __dirname,
         '..',
         '..',
         '..',
