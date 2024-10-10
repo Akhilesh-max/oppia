@@ -1084,7 +1084,7 @@ export class ExplorationEditor extends BaseUser {
       case 'Text Input':
         await this.clickOn(addResponseOptionButton);
         await this.page.waitForSelector(textInputInteractionOption);
-        await this.page.type(textInputInteractionOption, answer);
+        await this.type(textInputInteractionOption, answer);
         break;
       case 'Fraction Input':
         await this.clearAllTextFrom(intEditorField);
